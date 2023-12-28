@@ -42,13 +42,13 @@ jobs:
       run: |
         sudo apt-get install libsdl2-dev libsdl2-image-dev
 
-    - name: Download libraries (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        wget https://github.com/libsdl-org/SDL/releases/download/release-2.28.5/SDL2-devel-2.28.5-mingw.zip
-        wget https://github.com/libsdl-org/SDL_image/releases/download/release-2.8.1/SDL2_image-devel-2.8.1-mingw.zip
-        7z x SDL2-devel-*.zip
-        7z x SDL2_image-devel-*.zip
+    #- name: Download libraries (Windows)
+    #  if: runner.os == 'Windows'
+    #  run: |
+    #    wget https://github.com/libsdl-org/SDL/releases/download/release-2.28.5/SDL2-devel-2.28.5-mingw.zip
+    #    wget https://github.com/libsdl-org/SDL_image/releases/download/release-2.8.1/SDL2_image-devel-2.8.1-mingw.zip
+    #    7z x SDL2-devel-*.zip
+    #    7z x SDL2_image-devel-*.zip
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
