@@ -19,6 +19,8 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
         c_compiler: [gcc, clang, cl]
+        sdl_version: [2.28.5]
+        sdl_image_version: [2.8.2]
         include:
           - os: windows-latest
             c_compiler: gcc
@@ -40,15 +42,18 @@ jobs:
     - name: Download libraries (Linux)
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get install libsdl2-dev libsdl2-image-dev
+        sudo apt install libsdl2-dev libsdl2-image-dev
 
     - name: Download libraries (Windows)
       if: runner.os == 'Windows'
       run: |
-        curl -OL https://github.com/libsdl-org/SDL/releases/download/release-2.28.5/SDL2-devel-2.28.5-mingw.zip
-        curl -OL https://github.com/libsdl-org/SDL_image/releases/download/release-2.8.1/SDL2_image-devel-2.8.1-mingw.zip
-        7z x SDL2-devel-*.zip
-        7z x SDL2_image-devel-*.zip
+        mkdir libraries
+        cd libraries
+        curl -OL https://github.com/libsdl-org/SDL/releases/download/release-${{  matrix.sdl_version  }}/SDL2-devel-${{  matrix.sdl_version  }}-mingw.zip
+        curl -OL https://github.com/libsdl-org/SDL_image/releases/download/release-${{  matrix.sdl_image_version  }}/SDL2_image-devel-${{  matrix.sdl_image_version  }}-mingw.zip
+        7z x SDL2*.zip
+        cd ..
+        copy libraries/SDL2*/x86_64*/bin/*.dll include
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -57,6 +62,8 @@ jobs:
         cmake -B ${{ github.workspace }}/build
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DSDL2_DIR=${{ github.workspace }}/libraries/SDL2-${{  matrix.sdl_version  }}/x86_64-w64-mingw32/lib/cmake/SDL2 
+        -DSDL2_IMAGE_DIR=${{ github.workspace }}/libraries/SDL2_image-${{  matrix.sdl_image_version  }}/x86_64-w64-mingw32/lib/cmake/SDL2_image
         -S ${{ github.workspace }}
 
     - name: Build
