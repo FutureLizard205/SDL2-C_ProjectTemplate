@@ -14,12 +14,15 @@ INCLUDE(FindPkgConfig)
 if(UNIX)
 	pkg_search_module(SDL2 REQUIRED sdl2)
 	pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+ 
+ 	include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
+    	target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES})
     
 else ()
 	list(APPEND CMAKE_MODULE_PATH ${CMAKE_SDL2_MODULES_PATH})
 	find_package(SDL2 REQUIRED)
 	find_package(SDL2_image REQUIRED)
+  
+	include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+	target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image)
 endif ()
-
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image)
