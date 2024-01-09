@@ -16,7 +16,7 @@ add_executable(${PROJECT_NAME}
     #pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
     
 #else ()
-	list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
+	list(APPEND CMAKE_MODULE_PATH ${CMAKE_SDL2_MODULES_PATH})
 	find_package(SDL2 REQUIRED)
 	find_package(SDL2_image REQUIRED)
 #endif ()
