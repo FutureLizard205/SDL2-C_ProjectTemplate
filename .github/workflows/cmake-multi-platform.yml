@@ -62,8 +62,8 @@ jobs:
         cmake -B ${{ github.workspace }}/build
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DSDL2_DIR=${{ github.workspace }}/libraries/SDL2-${{  matrix.sdl_version  }}/x86_64-w64-mingw32
-        -DSDL2_IMAGE_DIR=${{ github.workspace }}/libraries/SDL2_image-${{  matrix.sdl_image_version  }}/x86_64-w64-mingw32
+        -DSDL2_PATH=${{ github.workspace }}/libraries/SDL2-${{  matrix.sdl_version  }}/x86_64-w64-mingw32
+        -DSDL2_IMAGE_PATH=${{ github.workspace }}/libraries/SDL2_image-${{  matrix.sdl_image_version  }}/x86_64-w64-mingw32
         -S ${{ github.workspace }}
 
     - name: Build
