@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "globalConstants.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("Failed to initialize SDL2.\n");
         return EXIT_FAILURE;

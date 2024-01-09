@@ -9,16 +9,19 @@ add_executable(${PROJECT_NAME}
         src/globalConstants.h)
 
 
-INCLUDE(FindPkgConfig)
+#INCLUDE(FindPkgConfig)
 
-if(UNIX)
-    pkg_search_module(SDL2 REQUIRED sdl2)
-    pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+#if(UNIX)
+    #pkg_search_module(SDL2 REQUIRED sdl2)
+    #pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+    
+#else ()
+	list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
+	set(SDL2_PATH "C:\\Users/Miguel/Downloads/SDL2-C_ProjectTemplate-main/libraries/SDL2-2.28.5/x86_64-w64-mingw32")
+	set(SDL2_IMAGE_PATH "C:\\Users/Miguel/Downloads/SDL2-C_ProjectTemplate-main/libraries/SDL2_image-2.8.2/x86_64-w64-mingw32")
+	find_package(SDL2 REQUIRED)
+	find_package(SDL2_image REQUIRED)
+#endif ()
 
-    include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES})
-else ()
-    include_directories(libraries/SDL2-devel-2.28.5-mingw/include libraries/SDL2_image-devel-2.8.1-mingw/include)
-    target_link_libraries(${PROJECT_NAME} libraries/SDL2-devel-2.28.5-mingw/lib libraries/SDL2_image-devel-2.8.1-mingw/lib)
-
-endif ()
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image)
