@@ -61,7 +61,8 @@ jobs:
     - name: Normalize Workspace Path (Windows)
       if: runner.os == 'Windows'
       run: |
-        $workspacePath = "${{ github.workspace }}" -replace '\\', '/'
+        $workspacePath = "${{ github.workspace }}" -replace '\\', '/' 
+        echo "workspacePath=$workspacePath" >> $GITHUB_ENV
 
     - name: Normalize Workspace Path (Linux)
       if: runner.os == 'Linux'
