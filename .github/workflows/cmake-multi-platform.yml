@@ -55,6 +55,7 @@ jobs:
         7z x SDL2*.zip
         cd ..
         copy libraries/SDL2*/x86_64*/bin/*.dll include
+        dir ${{ github.workspace }}\cmake
         dir ${{ github.workspace }}\cmake\sdl2
 
     - name: Configure CMake
