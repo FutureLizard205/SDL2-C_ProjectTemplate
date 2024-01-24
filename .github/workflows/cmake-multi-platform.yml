@@ -59,12 +59,12 @@ jobs:
         dir ${{ github.workspace }}\cmake\sdl2        
 
     - name: Normalize Workspace Path (Windows)
-      if: runer.os == 'Windows'
+      if: runner.os == 'Windows'
       run: |
         $workspacePath = ${{ github.workspace }} -replace '\\', '/'
 
     - name: Normalize Workspace Path (Linux)
-      if: runer.os == 'Linux'
+      if: runner.os == 'Linux'
       run: |
         workspacePath = ${{ github.workspace }}
         
