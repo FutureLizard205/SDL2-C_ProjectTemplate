@@ -56,19 +56,25 @@ jobs:
         cd ..
         copy libraries/SDL2*/x86_64*/bin/*.dll include
         dir ${{ github.workspace }}\cmake
-        dir ${{ github.workspace }}\cmake\sdl2
+        dir ${{ github.workspace }}\cmake\sdl2        
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: >
-        cmake -B ${{ github.workspace }}/build
+      run: |
+        # Normalize the Workspace path (for Windows)
+        normalizedPath=$(echo "${{ github.workspace }}" | sed 's|\\|/|g')
+
+        # Print the normalized path
+        echo "Normalized Path: $workspacePath"
+        
+        cmake -B $workspacePath/build
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DCMAKE_SDL2_MODULES_PATH='${{ github.workspace }}\cmake\sdl2'
-        -DSDL2_PATH='${{ github.workspace }}\libraries\SDL2-${{  matrix.sdl_version  }}\x86_64-w64-mingw32'
-        -DSDL2_IMAGE_PATH='${{ github.workspace }}\libraries\SDL2_image-${{  matrix.sdl_image_version  }}\x86_64-w64-mingw32'
-        -S ${{ github.workspace }}
+        -DCMAKE_SDL2_MODULES_PATH=$workspacePath\cmake\sdl2
+        -DSDL2_PATH=$workspacePath\libraries\SDL2-${{  matrix.sdl_version  }}\x86_64-w64-mingw32
+        -DSDL2_IMAGE_PATH=$workspacePath\libraries\SDL2_image-${{  matrix.sdl_image_version  }}\x86_64-w64-mingw32
+        -S $workspacePath
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
