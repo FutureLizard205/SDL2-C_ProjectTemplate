@@ -61,12 +61,12 @@ jobs:
     - name: Normalize Workspace Path (Windows)
       if: runner.os == 'Windows'
       run: |
-        $workspacePath = ${{ github.workspace }} -replace '\\', '/'
+        $workspacePath = "${{ github.workspace }}" -replace '\\', '/'
 
     - name: Normalize Workspace Path (Linux)
       if: runner.os == 'Linux'
       run: |
-        workspacePath = ${{ github.workspace }}
+        workspacePath=${{ github.workspace }}
         
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
