@@ -75,7 +75,7 @@ jobs:
       run: |
         $workspacePath = "${{ github.workspace }}" -replace '\\', '/' 
         Write-Output "Variable Value: $workspacePath"
-        cmake -B $workspacePath/build -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_SDL2_MODULES_PATH="$workspacePath/cmake/sdl2" -DSDL2_PATH="$workspacePath/libraries/SDL2-${{  matrix.sdl_version  }}/x86_64-w64-mingw32" -DSDL2_IMAGE_PATH="$workspacePath/libraries/SDL2_image-${{  matrix.sdl_image_version  }}/x86_64-w64-mingw32" -S $workspacePath -G "MinGW Makefiles" --debug-output
+        cmake -B $workspacePath/build -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_SDL2_MODULES_PATH="$workspacePath/cmake/sdl2" -DSDL2_PATH="$workspacePath/libraries/SDL2-${{  matrix.sdl_version  }}/x86_64-w64-mingw32" -DSDL2_IMAGE_PATH="$workspacePath/libraries/SDL2_image-${{  matrix.sdl_image_version  }}/x86_64-w64-mingw32" -S $workspacePath --debug-output
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
