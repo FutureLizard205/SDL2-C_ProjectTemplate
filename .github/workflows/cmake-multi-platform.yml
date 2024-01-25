@@ -104,7 +104,7 @@ jobs:
       run: |
         cmake --install build --prefix ./
         mkdir output
-        move build/Release/*.exe output/
+        move build/*.exe output/
         xcopy /S /I /E include output\
         cd output
         7z a -mm=Deflate -mfb=128 -mpass=10 -mx=8 -tzip ${{ github.event.repository.name }}.zip .
