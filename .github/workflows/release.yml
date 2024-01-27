@@ -20,33 +20,44 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
-        c_compiler: [gcc, clang, cl]
-        include:
-          - os: windows-latest
-            c_compiler: gcc
-          - os: windows-latest
-            c_compiler: cl
-          - os: windows-latest
-            c_compiler: clang
-          - os: ubuntu-latest
-            c_compiler: gcc
-          - os: ubuntu-latest
-            c_compiler: clang
-        exclude:
-          - os: ubuntu-latest
-            c_compiler: cl
+        c_compiler: [gcc]
+        sdl_version: [2.28.5]
+        sdl_image_version: [2.8.2]
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+    - name: Download libraries (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install libsdl2-dev libsdl2-image-dev
+
+    - name: Download libraries (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        mkdir libraries
+        cd libraries
+        curl -OL https://github.com/libsdl-org/SDL/releases/download/release-${{  matrix.sdl_version  }}/SDL2-devel-${{  matrix.sdl_version  }}-mingw.zip
+        curl -OL https://github.com/libsdl-org/SDL_image/releases/download/release-${{  matrix.sdl_image_version  }}/SDL2_image-devel-${{  matrix.sdl_image_version  }}-mingw.zip
+        7z x SDL2*.zip
+        cd ..
+        copy libraries/SDL2*/x86_64*/bin/*.dll include        
+
+    - name: Configure CMake (Linux)
+      if: runner.os == 'Linux'
       run: >
         cmake -B ${{ github.workspace }}/build
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -S ${{ github.workspace }}
+
+    - name: Configure CMake (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        $workspacePath = "${{ github.workspace }}" -replace '\\', '/' 
+        Write-Output "Variable Value: $workspacePath"
+        cmake -B $workspacePath/build -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_SDL2_MODULES_PATH="$workspacePath/cmake/sdl2" -DSDL2_PATH="$workspacePath/libraries/SDL2-${{  matrix.sdl_version  }}/x86_64-w64-mingw32" -DSDL2_IMAGE_PATH="$workspacePath/libraries/SDL2_image-${{  matrix.sdl_image_version  }}/x86_64-w64-mingw32" -S $workspacePath  -G "MinGW Makefiles"
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
@@ -75,7 +86,7 @@ jobs:
       run: |
         cmake --install build --prefix ./
         mkdir output
-        move build/Release/*.exe output/
+        move build/*.exe output/
         xcopy /S /I /E include output\
         cd output
         7z a -mm=Deflate -mfb=128 -mpass=10 -mx=8 -tzip package.zip .
