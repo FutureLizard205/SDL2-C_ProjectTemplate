@@ -76,7 +76,7 @@ jobs:
         mkdir output
         rsync -av --exclude='*.txt' --exclude='*.cmake' --exclude='Makefile' --exclude='CMakeFiles/' --exclude='Testing/' build/ output/
         chmod +x output/*
-        cp -r include/* output/
+        cp -r include/* output/ 2>/dev/null || :
         cd output
         7z a -mm=Deflate -mfb=128 -mpass=10 -mx=8 -tzip package.zip .
         cd ..
