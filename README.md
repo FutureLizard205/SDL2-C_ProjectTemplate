@@ -1,4 +1,4 @@
-# Template for C projects with SDL2 (WIP)
+# Template for C projects with SDL2
 
 ### Features:
 - Workflow for automatic compilation for evey push to the main branch;
